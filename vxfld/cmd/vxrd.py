@@ -211,7 +211,7 @@ class _Vxrd(service.Vxfld):
     """
     __VXLAN_REGEX = re.compile(
         r'^\d+: (?P<dev_name>\S+):'
-        r'(?=.*state\s+(?P<state>\S+))'
+        r'(?=.*master\s+\S+\s+state\s+(?P<state>\S+))'
         r'(?=.*vxlan\s+id\s+(?P<vni>\d+))'
         r'(?=.*dstport\s+(?P<dstport>\d+))?'
         r'(?=.*local\s+(?P<local_addr>{0}))?'
