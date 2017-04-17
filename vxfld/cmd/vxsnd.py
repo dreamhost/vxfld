@@ -416,7 +416,7 @@ class _Vxsnd(service.Vxfld):
                 ret = (op_dict, None)
             elif msg['aging'] and msg['stats']:
                 aged = self.__fdb.aging_history()
-                ret = ({'aged': aged}, None)
+                ret = (aged, None)
             else:
                 ret = (None, RuntimeError('Unknown request'))
         except Exception as ex:  # pylint: disable=broad-except
