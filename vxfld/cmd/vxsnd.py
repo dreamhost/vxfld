@@ -100,14 +100,14 @@ class _Fdb(object):
         """
         return next((ele for ele in vni_set if entry == ele), None)
 
-    def ageout(self):
+    def ageout(self, stats_duration=3600):
         """ Ages out an IP address for an VNI. Removes the VNI from the
         FDB when all addresses have been aged out.
         """
         now = int(time.time())
         new_fdb = {}
         for aged in self.__aging_history.keys():
-            if aged < now - 3600:
+            if aged < now - stats_duration:
                 del self.__aging_history[aged]
         for vni, vni_set in self.__data.iteritems():
             new_vni_set = {ele for ele in vni_set
@@ -125,11 +125,11 @@ class _Fdb(object):
                 new_fdb[vni] = new_vni_set
         self.__data = new_fdb
 
-    def aging_history(self):
+    def aging_stats(self, stats_duration=3600):
         now = int(time.time())
         sum = 0
         for aging in self.__aging_history:
-            if now - aging > 3600:
+            if now - aging > stats_duration:
                 continue
             else:
                 sum += self.__aging_history[aging]
@@ -415,7 +415,7 @@ class _Vxsnd(service.Vxfld):
                     })
                 ret = (op_dict, None)
             elif msg['aging'] and msg['stats']:
-                aged = self.__fdb.aging_history()
+                aged = self.__fdb.aging_stats(stats_duration=self._conf.stats_duration)
                 ret = (aged, None)
             else:
                 ret = (None, RuntimeError('Unknown request'))
