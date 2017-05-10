@@ -495,7 +495,7 @@ class _Vxsnd(service.Vxfld):
         while True:
             now = int(time.time())
             if now >= next_ageout:
-                self.__fdb.ageout()
+                self.__fdb.ageout(self._conf.stats_duration)
                 next_ageout = now + self._conf.age_check
             eventlet.sleep(self._conf.age_check)
 
