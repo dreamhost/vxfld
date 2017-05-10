@@ -128,9 +128,10 @@ class _Fdb(object):
     def aging_stats(self, stats_duration):
         now = int(time.time())
         sum = 0
-        for aging in self.__aging_history:
-            if int(now) - int(aging) < stats_duration:
-                sum += self.__aging_history[aging]
+        for hist in self.__aging_history:
+            age = now - hist
+            if int(age) < int(stats_duration):
+                sum += self.__aging_history[hist]
         return sum
 
     def get(self, vni, now=None):
