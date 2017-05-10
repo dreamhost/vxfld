@@ -223,6 +223,7 @@ class Config(object):
         vxlan_listen_port = IntegerField(default=None, nullable=True)
         vxfld_proxy_servers = ServerField(default=None, reloadable=True,
                                           nullable=True)
+        stats_duration = IntegerField(default=3600)
 
     def __init__(self, node_type, config_file):
         self.__params = self.__get_fields(self.CommonConfig)
