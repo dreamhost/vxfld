@@ -129,9 +129,7 @@ class _Fdb(object):
         now = int(time.time())
         sum = 0
         for aging in self.__aging_history:
-            if now - aging > stats_duration:
-                continue
-            else:
+            if int(now) - int(aging) < stats_duration:
                 sum += self.__aging_history[aging]
         return sum
 
@@ -415,7 +413,8 @@ class _Vxsnd(service.Vxfld):
                     })
                 ret = (op_dict, None)
             elif msg['aging'] and msg['stats']:
-                aged = self.__fdb.aging_stats(stats_duration=self._conf.stats_duration)
+                interval = msg.get('<interval>', self._conf.stats_duration)
+                aged = self.__fdb.aging_stats(stats_duration=interval)
                 ret = (aged, None)
             else:
                 ret = (None, RuntimeError('Unknown request'))

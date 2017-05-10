@@ -30,6 +30,8 @@ def main():
     """
     Usage:
         vxsndctl -h
+        vxsndctl [-u UDS_FILE] [-j] aging stats
+        vxsndctl [-u UDS_FILE] [-j] aging stats [<interval>]
         vxsndctl [-u UDS_FILE] [-j] fdb [debug]
         vxsndctl [-u UDS_FILE] [-j] fdb [<vni>] [debug]
         vxsndctl [-u UDS_FILE] [-j] fdb (add <vni> <ip> | del <vni> <ip> |
@@ -38,7 +40,6 @@ def main():
         vxsndctl [-u UDS_FILE] [-j] set config <parameter> [<value>]
         vxsndctl [-u UDS_FILE] [-j] set debug (on | off)
         vxsndctl [-u UDS_FILE] [-j] show [detail]
-        vxsndctl [-u UDS_FILE] [-j] aging stats
 
     Options:
         -h, --help   : Show this screen and exit
@@ -47,6 +48,8 @@ def main():
         -j           : Print result as json string
 
     Commands:
+        aging stats: print the number of aged endpoints over the past hour
+        aging stats <interval>: print the number of aged endpoints over the past <interval> seconds
         fdb: print the vxsnd forwarding DB
         fdb <vni>: print the vxsnd forwarding DB for a vni
         get config: print the vxsnd configuration
@@ -56,7 +59,6 @@ def main():
         set debug off: disable debug mode and set loglevel to previous level
         show: print a snapshot of the runtime configuration
         show detail: print a detailed snapshot of the runtime configuration
-        aging stats: print the number of aged endpoints over the past hour
     """
     from docopt import docopt
     from vxfld.common import mgmt
