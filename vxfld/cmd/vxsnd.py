@@ -414,7 +414,9 @@ class _Vxsnd(service.Vxfld):
                     })
                 ret = (op_dict, None)
             elif msg['aging'] and msg['stats']:
-                interval = msg.get('<interval>', self._conf.stats_duration)
+                interval = self._conf.stats_duration
+                if msg.get('<interval>') is not None:
+                  interval = msg.get('<interval>')
                 aged = self.__fdb.aging_stats(stats_duration=interval)
                 ret = (aged, None)
             else:
