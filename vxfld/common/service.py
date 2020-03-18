@@ -36,11 +36,10 @@ from vxfld.common import mgmt, utils, eventlet_backdoor
 from vxfld.common.enums import LogDestination
 
 
-class Vxfld(object):
+class Vxfld(object, metaclass=ABCMeta):
     """ Abstract base class that provides methods common to both vxsnd and
     vxrd.
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self, conf):
         self._conf = conf
@@ -112,7 +111,8 @@ class Vxfld(object):
                 buf, addr = sock.recvfrom(bufsize)
                 green_thread = pool.spawn(handle, buf, addr)
                 green_thread.link(self._stop_checker)
-            except socket.error as (err, _):
+            except socket.error as xxx_todo_changeme:
+                (err, _) = xxx_todo_changeme.args
                 if err in err_cbs:
                     err_cbs[err]()
                     return

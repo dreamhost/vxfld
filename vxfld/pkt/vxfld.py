@@ -125,14 +125,14 @@ class _Refresh(dpkt.Packet):
         return (
             self.__hdr_len__ + sum(self.ipstr_len(vni, iplist)
                                    for vni, iplist in
-                                   self.__vni_vteps.iteritems())
+                                   self.__vni_vteps.items())
         )
 
     def __str__(self):
         return (
             self.pack_hdr() +
             ''.join(self.__vtep_struct.pack(vni, iplist)
-                    for vni, iplist in self.__vni_vteps.iteritems())
+                    for vni, iplist in self.__vni_vteps.items())
         )
 
     def ipstr_len(self, _, iplist):
@@ -168,7 +168,7 @@ class _Refresh(dpkt.Packet):
         :param vteps: maps a VNI to a list of IP addresses
         :type vteps: dict[int, list[str]]
         """
-        for vni, ip_addr_list in vteps.iteritems():
+        for vni, ip_addr_list in vteps.items():
             self.__vni_vteps.setdefault(vni, [])
             self.__vni_vteps[vni].extend(ip_addr_list)
 
@@ -223,11 +223,9 @@ class Packet(dpkt.Packet):
             self.data = Sync(data=data, **inner)
 
 
-class Pb2Base(object):
+class Pb2Base(object, metaclass=ABCMeta):
     """ Base class for all protobuf messages.
     """
-    # pylint: disable=no-member,missing-docstring,too-few-public-methods
-    __metaclass__ = ABCMeta
 
     def __init__(self, cls, data=None, **kwargs):
         object.__setattr__(self, '_msg', cls(**kwargs))
@@ -315,7 +313,7 @@ class Refresh(Pb2Base):
     @classmethod
     def __serialize(cls, vtep):
         vni_dict = vxfld_pb2.Refresh.VniDict()
-        for vni, elements in vtep.items():
+        for vni, elements in list(vtep.items()):
             vni_dict.vni = vni
             for ele in elements:
                 entry = vni_dict.data.add()
@@ -351,7 +349,7 @@ class Refresh(Pb2Base):
         :param vteps: maps a VNI to a list of IP addresses
         :type vteps: dict[int, list[str]]
         """
-        for vni, entries in vteps.iteritems():
+        for vni, entries in vteps.items():
             vtep = self._msg.vteps.add()
             vtep.CopyFrom(self.__serialize({vni: entries}))
 
@@ -366,7 +364,7 @@ class Sync(Pb2Base):
     @classmethod
     def __serialize(cls, vtep):
         vni_dict = vxfld_pb2.Sync.VniDict()
-        for vni, elements in vtep.items():
+        for vni, elements in list(vtep.items()):
             vni_dict.vni = vni
             for ele in elements:
                 entry = vni_dict.data.add()
@@ -407,6 +405,6 @@ class Sync(Pb2Base):
                       address, holdtime and node identifier
         :type vteps: dict[int, list[(str, int, int)]]
         """
-        for vni, entries in vteps.iteritems():
+        for vni, entries in vteps.items():
             vtep = self._msg.vteps.add()
             vtep.CopyFrom(self.__serialize({vni: entries}))
