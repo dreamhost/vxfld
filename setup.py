@@ -22,7 +22,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'docopt==0.6.1',
-        'dpkt==1.8.6.2',
+        'dpkt==1.9.2',
         'eventlet>=0.17',
         'protobuf',
         'python-daemon'
