@@ -36,6 +36,7 @@ import eventlet.pools
 from vxfld.common import config, netlink, service, utils
 from vxfld.common.enums import NodeType, OperState
 from vxfld.pkt import vxfld as VXFLD
+from functools import reduce
 
 _IP_ADDR_REGEX = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 NODE_TYPE = NodeType.VXRD
@@ -477,7 +478,7 @@ class _Vxrd(service.Vxfld):
         # Compute the list of updated VNIs
         updated_vnis = {
             vni: set(iplist)
-            for vni, iplist in refresh_pkt.vni_vteps.iteritems()
+            for vni, iplist in refresh_pkt.vni_vteps.items()
             if set(iplist) != self.__peerdb.get(vni, set())
         }
         if updated_vnis:
@@ -501,7 +502,7 @@ class _Vxrd(service.Vxfld):
             self.__vni_config = self.__get_vxlan_config()
         if old and old != self.__vni_config:
             removed = {vni: vni_config
-                       for vni, vni_config in old.iteritems()
+                       for vni, vni_config in old.items()
                        if vni not in self.__vni_config}
             self.__remove_vnis(removed)
         # Send a refresh message to the SND with the current config.
@@ -626,7 +627,7 @@ class _Vxrd(service.Vxfld):
             self._logger.debug(str(ex))
         else:
             updated_vnis = {}
-            for vni, vni_config in self.__vni_config.iteritems():
+            for vni, vni_config in self.__vni_config.items():
                 peerips = self.__peerdb.get(vni, set())
                 myaddr = {vni_config.localip}
                 dev_name = vni_config.dev_name
@@ -639,7 +640,7 @@ class _Vxrd(service.Vxfld):
                 # bridge fdb table.
                 try:
                     with _BridgeUtils() as bridge_obj:
-                        for dev_name, ip_addrs in dev_map.iteritems():
+                        for dev_name, ip_addrs in dev_map.items():
                             for ip_addr in ip_addrs:
                                 bridge_obj.add_entry(_BridgeUtils.DEL,
                                                      dev_name,
@@ -658,7 +659,7 @@ class _Vxrd(service.Vxfld):
         """
         try:
             with _BridgeUtils() as bridge_obj:
-                for vni, ipset in updated_vnis.iteritems():
+                for vni, ipset in updated_vnis.items():
                     if vni not in self.__vni_config:
                         continue
                     dev_name = self.__vni_config[vni].dev_name

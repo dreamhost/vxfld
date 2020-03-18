@@ -29,7 +29,7 @@ import greenlet
 def _dont_use_this():
     """ Name says it all.
     """
-    print 'Don\'t use this, just disconnect instead'
+    print('Don\'t use this, just disconnect instead')
 
 
 def _displayhook(val):
@@ -54,19 +54,19 @@ def _print_greenthreads():
     """
     # pylint: disable=no-member
     for i, green_thread in enumerate(_find_objects(greenlet.greenlet)):
-        print i, green_thread
+        print(i, green_thread)
         traceback.print_stack(green_thread.gr_frame)
-        print
+        print()
 
 
 def _print_nativethreads():
     """ Print tracebacks for all python threads.
     """
     # pylint: disable=protected-access
-    for thread_id, stack in sys._current_frames().iteritems():
-        print thread_id
+    for thread_id, stack in sys._current_frames().items():
+        print(thread_id)
         traceback.print_stack(stack)
-        print
+        print()
 
 
 def initialize_if_enabled(backdoor_port):
