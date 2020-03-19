@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 # Copyright 2014, 2015 Cumulus Networks, Inc. All rights reserved.
 #
@@ -71,63 +71,63 @@ def main():
     if resp is None:
         return 0
     if args['-j'] and not args['config']:
-        print(json.dumps(resp))
+        print json.dumps(resp)
     elif args['fdb']:
         # This was a fdb request
         if args['debug']:
             fmt = '{:<8}    {:<12}    {:<6}    {:<12}'
-            print(fmt.format('VNI', 'Address', 'Ageout', 'NodeId'))
-            print(fmt.format('===', '=======', '======', '======'))
+            print fmt.format('VNI', 'Address', 'Ageout', 'NodeId')
+            print fmt.format('===', '=======', '======', '======')
             for vni in sorted(resp.keys()):
                 for ip_addr, holdtime, identifier in \
                         sorted(resp[vni], key=operator.itemgetter(0)):
-                    print(fmt.format(vni, ip_addr, holdtime, identifier))
+                    print fmt.format(vni, ip_addr, holdtime, identifier)
         else:
             fmt = '{:<8}    {:<12}    {:<6}'
-            print(fmt.format('VNI', 'Address', 'Ageout'))
-            print(fmt.format('===', '=======', '======'))
+            print fmt.format('VNI', 'Address', 'Ageout')
+            print fmt.format('===', '=======', '======')
             for vni in sorted(resp.keys()):
                 for ip_addr, holdtime, _ in set(resp[vni]):
-                    print(fmt.format(vni, ip_addr, holdtime))
+                    print fmt.format(vni, ip_addr, holdtime)
     elif args['get'] and args['config']:
-        print(json.dumps(resp, sort_keys=True, indent=4,
-                         separators=(',', ': ')))
+        print json.dumps(resp, sort_keys=True, indent=4,
+                         separators=(',', ': '))
     elif args['set'] and args['config']:
-        print(json.dumps(resp, sort_keys=True, indent=4,
-                         separators=(',', ': ')))
+        print json.dumps(resp, sort_keys=True, indent=4,
+                         separators=(',', ': '))
     elif args['show']:
-        print('Protocol version: %s' % resp['version'])
+        print 'Protocol version: %s' % resp['version']
         fmt = '{:<15}    {:<15}    {:<40}'
         addr_per_line = 2
-        print(fmt.format('Local address', 'Anycast address', 'Peer Addresses'))
-        print(fmt.format('=============', '===============', '=============='))
+        print fmt.format('Local address', 'Anycast address', 'Peer Addresses')
+        print fmt.format('=============', '===============', '==============')
         if resp:
             peer_addresses = sorted(resp['peers'])
             for idx in range(0, max(len(peer_addresses), 1), addr_per_line):
                 peer_addr_str = ', '.join(
                     peer_addresses[idx:idx+addr_per_line])
                 if idx == 0:
-                    print(fmt.format(resp['local'], resp['anycast'],
-                                     peer_addr_str))
+                    print fmt.format(resp['local'], resp['anycast'],
+                                     peer_addr_str)
                 else:
-                    print(fmt.format('', '', peer_addr_str))
+                    print fmt.format('', '', peer_addr_str)
             if args['detail']:
                 fmt = '{:<34}    {:<30}'
-                print()
-                print(fmt.format('Data (UDP) Port', 'Control (UDP) Port'))
-                print(fmt.format('==============', '================='))
-                print(fmt.format(resp['data_port'], resp['ctrl_port']))
+                print
+                print fmt.format('Data (UDP) Port', 'Control (UDP) Port')
+                print fmt.format('==============', '=================')
+                print fmt.format(resp['data_port'], resp['ctrl_port'])
         else:
-            print('None')
+            print 'None'
     else:
-        print('%r' % resp)
+        print '%r' % resp
     return 0
 
 if __name__ == '__main__':
     try:
         sys.exit(main())
     except DocoptExit as ex:
-        print(ex)
+        print ex
     except (KeyboardInterrupt, SystemExit):
         pass
     except Exception as ex:  # pylint: disable=broad-except

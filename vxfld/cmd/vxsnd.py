@@ -91,7 +91,7 @@ class _Fdb(object):
 
     def __str__(self):
         return ', '.join('%d: %s' % (vni, vni_set)
-                         for vni, vni_set in self.__data.items())
+                         for vni, vni_set in self.__data.iteritems())
 
     @staticmethod
     def __find(vni_set, entry):
@@ -106,10 +106,10 @@ class _Fdb(object):
         """
         now = int(time.time())
         new_fdb = {}
-        for aged in list(self.__aging_history.keys()):
+        for aged in self.__aging_history.keys():
             if aged < now - stats_duration:
                 del self.__aging_history[aged]
-        for vni, vni_set in self.__data.items():
+        for vni, vni_set in self.__data.iteritems():
             new_vni_set = {ele for ele in vni_set
                            if now <= ele.ageout or ele.ageout == self.NO_AGE}
             difference = vni_set - new_vni_set
@@ -161,7 +161,7 @@ class _Fdb(object):
         :rtype: dict[int, set[str]]
         """
         ret = {}
-        for vni, ele_set in self.__data.items():
+        for vni, ele_set in self.__data.iteritems():
             addr_set = {ele.addr for ele in ele_set
                         if ele.ageout == _Fdb.NO_AGE}
             if addr_set:
@@ -198,7 +198,7 @@ class _Fdb(object):
         else:
             vni_dict = {vni: self.get(vni)}
         output_dict = collections.defaultdict(list)
-        for vni, vni_data in vni_dict.items():
+        for vni, vni_data in vni_dict.iteritems():
             for addr, holdtime, identifier in vni_data:
                 holdtime_str = str(holdtime)
                 if holdtime == self.NO_AGE:
@@ -707,7 +707,7 @@ class _Vxsnd(service.Vxfld):
             )
             if pkt.data.vni_vteps:
                 self._logger.info('Sync data from %s', srcip)
-                for vni, iplist in pkt.data.vni_vteps.items():
+                for vni, iplist in pkt.data.vni_vteps.iteritems():
                     for ele in iplist:
                         ip_addr, holdtime, identifier = ele
                         self.__fdb.update(vni, ip_addr, holdtime, identifier)
@@ -841,7 +841,7 @@ class _Vxsnd(service.Vxfld):
         identifier = pkt_args.get('identifier', _Fdb.DEFAULT_ID)
         version = pkt_args.get('version', VXFLD.VERSION)
         vxfld_pkt = None
-        for vni, msgdata in vteps.items():
+        for vni, msgdata in vteps.iteritems():
             # Limit the refresh message size to max_packet_size.
             if (vxfld_pkt is None or
                     VXFLD.BASE_PKT_SIZE + len(vxfld_pkt) +
@@ -945,7 +945,7 @@ class _Vxsnd(service.Vxfld):
         :raises: socket.error when sync=True
         """
         vteps = collections.defaultdict(list)
-        for vni, ip_addr_set in vni_dict.items():
+        for vni, ip_addr_set in vni_dict.iteritems():
             for ip_addr in ip_addr_set:
                 if holdtime:
                     self.__fdb.update(vni, ip_addr, holdtime, identifier)

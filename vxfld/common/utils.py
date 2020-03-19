@@ -109,8 +109,8 @@ def get_config_params(node_type, reloadable=False):
     :returns: dictionary mapping configuration params to their values
     """
     conf = config.Config(node_type, '')
-    print(' '.join({param for param in conf.get_params()
-                    if not reloadable or conf.is_reloadable(param)}))
+    print ' '.join({param for param in conf.get_params()
+                    if not reloadable or conf.is_reloadable(param)})
 
 
 def get_logger(node_type, logdest, filehandler_args=None):
@@ -158,7 +158,7 @@ def load_configuration(node_type, args):
     :return: a configuration (Config) object
     """
     conf = config.Config(node_type, args.config_file)
-    for param, val in vars(args).items():
+    for param, val in vars(args).iteritems():
         if val is not None:
             setattr(conf, param, val)
     return conf
@@ -256,6 +256,6 @@ class SetEncoder(json.JSONEncoder):
             return {
                 attr: (value if not isinstance(value, set)
                        else self.default(value))
-                for attr, value in vars(obj).items()
+                for attr, value in vars(obj).iteritems()
             }
         return super(SetEncoder, self).default(obj)

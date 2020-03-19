@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 # Copyright 2014, 2015 Cumulus Networks, Inc. All rights reserved.
 #
@@ -59,7 +59,7 @@ def main():
     if err:
         raise Exception('Error return: "%s"' % err)
     if args['-j'] and not args['config']:
-        print((json.dumps(resp, cls=utils.SetEncoder)))
+        print json.dumps(resp, cls=utils.SetEncoder)
     elif args['vxlans']:
         if args['hrep']:
             if resp is None:
@@ -69,8 +69,8 @@ def main():
                 )
             else:
                 fmt = '{:<8}    {:<12}    {:<60}'
-                print((fmt.format('VNI', 'Device', 'HREP Addrs')))
-                print((fmt.format('===', '======', '==========')))
+                print fmt.format('VNI', 'Device', 'HREP Addrs')
+                print fmt.format('===', '======', '==========')
                 if resp:
                     for vni in sorted(resp.keys()):
                         display = [vni, resp[vni].dev_name]
@@ -85,19 +85,19 @@ def main():
                                 display.append(hrep_addr_str)
                             else:
                                 display = ['', '', hrep_addr_str]
-                            print((fmt.format(*display)))
+                            print fmt.format(*display)
                 else:
-                    print('None')
+                    print 'None'
         else:
             fmt = '{:<8}    {:<12}    {:<12}'
-            print((fmt.format('VNI', 'Local Addr', 'Svc Node')))
-            print((fmt.format('===', '==========', '========')))
+            print fmt.format('VNI', 'Local Addr', 'Svc Node')
+            print fmt.format('===', '==========', '========')
             if resp:
                 for vni in sorted(resp):
-                    print((fmt.format(vni, resp[vni].localip,
-                                     resp[vni].svcnodeip)))
+                    print fmt.format(vni, resp[vni].localip,
+                                     resp[vni].svcnodeip)
             else:
-                print('None')
+                print 'None'
     elif args['peers']:
         if resp is None:
             print (
@@ -107,35 +107,35 @@ def main():
             return 0
         addr_per_line = 4
         fmt = '{:<8}    {:<60}'
-        print((fmt.format('VNI', 'Peer Addrs')))
-        print((fmt.format('===', '==========')))
+        print fmt.format('VNI', 'Peer Addrs')
+        print fmt.format('===', '==========')
         if resp:
             for vni in sorted(resp.keys()):
                 peer_addresses = sorted(resp[vni])
                 for idx in range(0, len(peer_addresses), addr_per_line):
                     peer_addr_str = ', '.join(
                         peer_addresses[idx:idx+addr_per_line])
-                    print((fmt.format(vni if idx == 0 else '', peer_addr_str)))
+                    print fmt.format(vni if idx == 0 else '', peer_addr_str)
         else:
-            print('None')
+            print 'None'
     elif args['get'] and args['config']:
-        print((json.dumps(resp, sort_keys=True, indent=4,
-                         separators=(',', ': '))))
+        print json.dumps(resp, sort_keys=True, indent=4,
+                         separators=(',', ': '))
     elif args['show']:
-        print(('Protocol version: %s' % resp['version']))
+        print 'Protocol version: %s' % resp['version']
         fmt = '{:<15}    {:<15}    {:<15}'
-        print((fmt.format('Local address', 'Svcnode address', 'Head rep.')))
+        print fmt.format('Local address', 'Svcnode address', 'Head rep.')
 
-        print((fmt.format('=============', '===============', '=========')))
-        print((fmt.format(resp['src_ip'], resp['snd_ip'],
-                         'Enabled' if resp['head_rep'] else 'Disabled')))
+        print fmt.format('=============', '===============', '=========')
+        print fmt.format(resp['src_ip'], resp['snd_ip'],
+                         'Enabled' if resp['head_rep'] else 'Disabled')
     return 0
 
 if __name__ == '__main__':
     try:
         sys.exit(main())
     except DocoptExit as ex:
-        print(ex)
+        print ex
     except (KeyboardInterrupt, SystemExit):
         pass
     except Exception as ex:  # pylint: disable=broad-except

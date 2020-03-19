@@ -86,8 +86,7 @@ class MgmtClient(socket.socket):
         try:
             socket.socket.__init__(self, socket.AF_UNIX, socket.SOCK_STREAM)
             self.connect(uds_file)
-        except socket.error as xxx_todo_changeme:
-            (errno, string) = xxx_todo_changeme.args
+        except socket.error, (errno, string):
             msg = ('Unable to connect to daemon on socket %s [%d]: %s' %
                    (uds_file, errno, string))
             raise RuntimeError(msg)

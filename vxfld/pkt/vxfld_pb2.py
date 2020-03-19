@@ -364,19 +364,26 @@ DESCRIPTOR.message_types_by_name['Proxy'] = _PROXY
 DESCRIPTOR.message_types_by_name['Refresh'] = _REFRESH
 DESCRIPTOR.message_types_by_name['Sync'] = _SYNC
 
-class IPv4Address(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+class IPv4Address(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
   DESCRIPTOR = _IPV4ADDRESS
   
   # @@protoc_insertion_point(class_scope:IPv4Address)
 
-class Proxy(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+class Proxy(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
   DESCRIPTOR = _PROXY
   
   # @@protoc_insertion_point(class_scope:Proxy)
 
-class Refresh(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
-  class VniDict(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
-    class VniData(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+class Refresh(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  
+  class VniDict(message.Message):
+    __metaclass__ = reflection.GeneratedProtocolMessageType
+    
+    class VniData(message.Message):
+      __metaclass__ = reflection.GeneratedProtocolMessageType
       DESCRIPTOR = _REFRESH_VNIDICT_VNIDATA
       
       # @@protoc_insertion_point(class_scope:Refresh.VniDict.VniData)
@@ -387,9 +394,14 @@ class Refresh(message.Message, metaclass=reflection.GeneratedProtocolMessageType
   
   # @@protoc_insertion_point(class_scope:Refresh)
 
-class Sync(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
-  class VniDict(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
-    class VniData(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+class Sync(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  
+  class VniDict(message.Message):
+    __metaclass__ = reflection.GeneratedProtocolMessageType
+    
+    class VniData(message.Message):
+      __metaclass__ = reflection.GeneratedProtocolMessageType
       DESCRIPTOR = _SYNC_VNIDICT_VNIDATA
       
       # @@protoc_insertion_point(class_scope:Sync.VniDict.VniData)

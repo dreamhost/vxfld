@@ -20,7 +20,7 @@
 """ Configuration file parser.
 """
 # pylint: disable=too-few-public-methods
-from configparser import RawConfigParser, NoSectionError
+from ConfigParser import RawConfigParser, NoSectionError
 import logging
 import socket
 import uuid
@@ -114,7 +114,7 @@ class LogLevelField(Field):
         defined levels passed to the method.
         """
         lvl = logging.getLevelName(value.upper())
-        if isinstance(lvl, str):
+        if isinstance(lvl, basestring):
             raise RuntimeError('Invalid log level %s' % value)
         return value
 
@@ -150,7 +150,7 @@ class _ConfigMeta(type):
     ConfigField.
     """
     def __new__(mcs, name, bases, class_dict):
-        for key, value in list(class_dict.items()):
+        for key, value in class_dict.items():
             if isinstance(value, Field):
                 value.name = key
                 value.section = class_dict['section']
@@ -161,9 +161,11 @@ class Config(object):
     """ Generic Config class.
     """
 
-    class CommonConfig(object, metaclass=_ConfigMeta):
+    class CommonConfig(object):
         """ Common configuration parameters.
         """
+        # pylint: disable=too-few-public-methods
+        __metaclass__ = _ConfigMeta
 
         section = ConfigSection.COMMON
         concurrency = IntegerField(default=1000)
@@ -185,18 +187,22 @@ class Config(object):
         udsfile = Field(default=None, nullable=True)
         vxfld_port = IntegerField(default=10001)
 
-    class VxrdConfig(object, metaclass=_ConfigMeta):
+    class VxrdConfig(object):
         """ Vxrd specific configuration parameters.
         """
+        # pylint: disable=too-few-public-methods
+        __metaclass__ = _ConfigMeta
 
         section = ConfigSection.VXRD
         config_check_rate = IntegerField(default=60, reloadable=True)
         head_rep = BooleanField(default=True, reloadable=True)
         refresh_rate = IntegerField(default=3, reloadable=True)
 
-    class VxsndConfig(object, metaclass=_ConfigMeta):
+    class VxsndConfig(object):
         """ Vxsnd specific configuration parameters.
         """
+        # pylint: disable=too-few-public-methods
+        __metaclass__ = _ConfigMeta
 
         area = IntegerField(default=None, nullable=True)
         age_check = IntegerField(default=90, reloadable=True)
@@ -251,7 +257,7 @@ class Config(object):
         """ Returns a set of ConfigField objects for a class.
         """
         return {
-            field for field in class_.__dict__.values()
+            field for field in class_.__dict__.itervalues()
             if isinstance(field, Field)
         }
 

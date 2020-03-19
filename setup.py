@@ -24,8 +24,8 @@ setup(
         'docopt==0.6.1',
         'dpkt==1.8.6.2',
         'eventlet>=0.17',
-        'protobuf',
-        'python-daemon'
+        'protobuf==2.4.1',
+        'python-daemon==1.5.5'
     ],
     license='GPLv2'
 )
