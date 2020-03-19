@@ -521,13 +521,13 @@ class _Vxrd(service.Vxfld):
                  an Exception.
         :raises: DeviceConfig.InvalidConfig or DeviceConfig.NonOperational
         """
-        if (localip is None or
-                (not self._conf.head_rep and svcnodeip is None)):
+        if (not self._conf.head_rep and svcnodeip is None):
             raise _DeviceConfig.InvalidConfig(
                 'Invalid configuration detected for device %s. localip: %s, '
                 'svcnodeip: %s, head_rep: %s' % (dev_name, localip, svcnodeip,
                                                  self._conf.head_rep)
             )
+        localip = self._conf.src_ip
         if state not in (OperState.OPERSTATE_STR[OperState.IF_OPER_UP],
                          OperState.OPERSTATE_STR[OperState.IF_OPER_UNKNOWN]):
             raise _DeviceConfig.NonOperational(
