@@ -234,7 +234,7 @@ class Pidfile(object):
 
     def write(self, pid):
         self.__pidfd.truncate(0)
-        self.__pidfd.write(b'%d\n' % pid)
+        self.__pidfd.write('%d\n' % pid)
         self.__pidfd.flush()
 
 
